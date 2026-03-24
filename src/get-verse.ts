@@ -7,15 +7,15 @@ export type Verse = {
 
 export const getVerse = async (verseDetail: VerseDetail): Promise<Verse> => {
   const url = `https://text.recoveryversion.bible/${verseDetail.bookNumber}_${verseDetail.book}_${verseDetail.chapter}.htm`;
-  console.log('constructed url', url);
+  // console.log('constructed url', url);
   const resp = await fetch(
     `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
   );
   // const resp = await fetch(`http://localhost:4000/proxy?url=${url}`);
   const text = await resp.text();
-  console.log('html', text);
+  // console.log('html', text);
   const verseWords = findVerseInHtml(text, verseDetail);
-  console.log('verseWords', verseWords);
+  // console.log('verseWords', verseWords);
 
   return {
     ref: `${verseDetail.book} ${verseDetail.chapter}:${verseDetail.verse}`,
