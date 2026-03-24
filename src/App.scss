@@ -1,0 +1,98 @@
+#center {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  place-content: center;
+  place-items: center;
+  flex-grow: 1;
+}
+
+.verseContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 8px;
+  // justify-content: center;
+  align-items: center;
+
+  .word {
+    padding: 8px 16px;
+    border: 1px solid black;
+    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.25);
+    user-select: none;
+
+    &.error {
+      background-color: #ffbebe;
+    }
+
+    &.selected {
+      background-color: yellow;
+    }
+
+    &:hover:not(.selected) {
+      background-color: #eee;
+      cursor: pointer;
+    }
+  }
+
+  .dropZone {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #aaa;
+    display: none;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .wdz {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+
+    //
+    .hit {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 50%;
+      cursor: pointer;
+
+      &.left {
+        left: 0;
+      }
+
+      &.right {
+        right: 0;
+      }
+    }
+
+    .hit.left:hover ~ .dropZone.left {
+      display: inline-block;
+    }
+
+    .hit.right:hover ~ .dropZone.right {
+      display: inline-block;
+    }
+  }
+}
+
+button {
+  font-size: 16px;
+  padding: 8px;
+  border-radius: 0;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+h4 {
+  color: green;
+  font-size: 24px;
+  margin: 0;
+}
