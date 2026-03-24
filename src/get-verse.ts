@@ -53,14 +53,14 @@ function nodeToHtml(node: ChildNode): string {
   return node.textContent ?? '';
 }
 
-const j13_1 = {
-  ref: 'John 13:1',
-  words:
-    'Now before the Feast of the Passover, Jesus knowing that His hour had come for Him to depart out of this world unto the Father, having loved His own who were in the world, He loved them to the uttermost.',
-};
+// const j13_1 = {
+//   ref: 'John 13:1',
+//   words:
+//     'Now before the Feast of the Passover, Jesus knowing that His hour had come for Him to depart out of this world unto the Father, having loved His own who were in the world, He loved them to the uttermost.',
+// };
 
-const j13_6 = {
-  ref: 'John 13:6',
-  words:
-    'He came then to Simon Peter. Peter said to Him, Lord, do You wash my feet?',
-};
+// const j13_6 = {
+//   ref: 'John 13:6',
+//   words:
+//     'He came then to Simon Peter. Peter said to Him, Lord, do You wash my feet?',
+// };
