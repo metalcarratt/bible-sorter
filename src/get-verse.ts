@@ -1,4 +1,4 @@
-import type { VerseDetail } from './get-random-verse';
+import type { VerseDetail } from './flat-bible';
 
 export type Verse = {
   ref: string;
@@ -8,9 +8,16 @@ export type Verse = {
 export const getVerse = async (verseDetail: VerseDetail): Promise<Verse> => {
   const url = `https://text.recoveryversion.bible/${verseDetail.bookNumber}_${verseDetail.book}_${verseDetail.chapter}.htm`;
   // console.log('constructed url', url);
-  const resp = await fetch(
-    `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-  );
+  let resp;
+  try {
+    resp = await fetch(
+      `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+    );
+  } catch (e) {
+    resp = await fetch(
+      `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+    );
+  }
   // const resp = await fetch(`http://localhost:4000/proxy?url=${url}`);
   const text = await resp.text();
   // console.log('html', text);

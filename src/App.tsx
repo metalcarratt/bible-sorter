@@ -4,6 +4,8 @@ import { Word } from './word';
 import { initWords } from './init-words';
 import { getVerse } from './get-verse';
 import { getRandomVerse } from './get-random-verse';
+import { Hint } from './hint';
+import type { VerseDetail } from './flat-bible';
 
 function App() {
   const [words, setWords] = useState<string[]>([]);
@@ -12,19 +14,30 @@ function App() {
   const [success, setSuccess] = useState(false);
   const [originalWords, setOriginalWords] = useState<string[]>([]);
   const [verseRef, setVerseRef] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    async function run() {
-      const randomVerse = getRandomVerse();
-      console.log('random verse', randomVerse);
-  
-      const verse = await getVerse(randomVerse);
+  const getNewWord = async (randomVerse: VerseDetail) => {
+    const verse = await getVerse(randomVerse);
       const originalWords = verse.words.split(' ');
       setWords(initWords(verse.words));
       setOriginalWords(originalWords);
       setVerseRef(verse.ref);
-    }
-    run();
+      setLoading(false);
+  }
+
+  const newWord = () => {
+    const randomVerse = getRandomVerse();
+    console.log('random verse', randomVerse);
+    setVerseRef(`${randomVerse.book} ${randomVerse.chapter}:${randomVerse.verse}`);
+    setLoading(true);
+    setSuccess(false);
+    setErrors([]);
+    
+    getNewWord(randomVerse);
+  }
+
+  useEffect(() => {
+    newWord();
   }, []);
 
   const swapWords = (insertAt: number) => {
@@ -61,9 +74,14 @@ function App() {
     }
   }
 
+  const printVerseRef = /^\d/.test(verseRef)
+    ? verseRef[0] + ' ' + verseRef.slice(1)
+    : verseRef;
+
   return (
     <section id="center">
       {success && <h4>Correct!</h4>}
+      {loading && <p>Loading...</p>}
       <div className="verseContainer">
         {words.map((w, i) =>
           <Word 
@@ -76,8 +94,9 @@ function App() {
           />
         )}
       </div>
-      <div className="reference">{verseRef}</div>
-      {/* <button onClick={() => checkWords(words)}>Check</button> */}
+      <div className="reference">{printVerseRef}</div>
+      <Hint words={originalWords} />
+      {success && <button onClick={newWord}>New word</button>}
     </section> 
   )
 }
