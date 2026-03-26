@@ -32,6 +32,9 @@ function App() {
     setLoading(true);
     setSuccess(false);
     setErrors([]);
+    setWords([]);
+    setSelectedWord(null);
+    setOriginalWords([]);
     
     getNewWord(randomVerse);
   }
