@@ -5,6 +5,15 @@
   place-content: center;
   place-items: center;
   flex-grow: 1;
+  padding: 20px;
+}
+
+.background {
+  position: fixed;
+  inset: 0;
+  background-size: cover; /* ensures width OR height is 100% */
+  background-position: center; /* centers the image */
+  background-repeat: no-repeat;
 }
 
 .verseContainer {
@@ -18,16 +27,22 @@
 
   .word {
     padding: 8px 16px;
-    border: 1px solid black;
+    border: 1px solid #999;
     box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.25);
     user-select: none;
+    background-image: url('/bible-sorter/bgs/paper.png');
+    inset: 0;
+    background-position: center; /* centers the image */
 
     &.error {
-      background-color: #ffbebe;
+      background-color: #fad8d8;
+      background-blend-mode: multiply;
     }
 
     &.selected {
-      background-color: yellow;
+      // background-color: yellow;
+      background-color: rgba(255, 255, 0, 0.4);
+      background-blend-mode: multiply;
     }
 
     &:hover:not(.selected) {
@@ -92,7 +107,18 @@ button {
 }
 
 h4 {
-  color: green;
+  // color: green;
+  font-weight: 400;
   font-size: 24px;
   margin: 0;
+  // padding: 8px 40px;
+}
+
+.bg {
+  // background-color: #eee;
+  background-image: url('/bible-sorter/bgs/paper.png');
+  inset: 0;
+  background-position: center; /* centers the image */
+  padding: 4px 40px;
+  box-shadow: 2px 2px 8px #333;
 }

@@ -6,6 +6,7 @@ import { getVerse } from './get-verse';
 import { getRandomVerse } from './get-random-verse';
 import { Hint } from './hint';
 import type { VerseDetail } from './flat-bible';
+import { getRandomBackground } from './backgrounds';
 
 function App() {
   const [words, setWords] = useState<string[]>([]);
@@ -15,7 +16,8 @@ function App() {
   const [originalWords, setOriginalWords] = useState<string[]>([]);
   const [verseRef, setVerseRef] = useState('');
   const [loading, setLoading] = useState(false);
-
+  const [background, setBackground] = useState('');
+ 
   const getNewWord = async (randomVerse: VerseDetail) => {
     const verse = await getVerse(randomVerse);
       const originalWords = verse.words.split(' ');
@@ -35,6 +37,7 @@ function App() {
     setWords([]);
     setSelectedWord(null);
     setOriginalWords([]);
+    setBackground(getRandomBackground());
     
     getNewWord(randomVerse);
   }
@@ -82,9 +85,9 @@ function App() {
     : verseRef;
 
   return (
-    <section id="center">
-      {success && <h4>Correct!</h4>}
-      {loading && <p>Loading...</p>}
+    <section id="center" className="background" style={{ backgroundImage: `url(/bible-sorter/${background})` }}>
+      {success && <h4 className="bg">Correct!</h4>}
+      {loading && <p className="bg">Loading...</p>}
       <div className="verseContainer">
         {words.map((w, i) =>
           <Word 
@@ -97,7 +100,7 @@ function App() {
           />
         )}
       </div>
-      <div className="reference">{printVerseRef}</div>
+      <div className="reference bg">{printVerseRef}</div>
       <Hint words={originalWords} />
       {success && <button onClick={newWord}>New word</button>}
     </section> 
@@ -105,4 +108,6 @@ function App() {
 }
 
 export default App
+
+
 

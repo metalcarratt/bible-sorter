@@ -11,7 +11,7 @@ export const Hint = ({words}: {words: string[]}) => {
   }
 
   if (!show) {
-    return <span>
+    return <span className="bg">
       Hints:{' '}
       {words.length > 5 && <><a href="#" onClick={(e) => showHint(e, 1)}>Five words</a>{' | '}</>}
       {words.length > 15 && <><a href="#" onClick={(e) => showHint(e, 2)}>Ten words</a>{' | '}</>}
@@ -25,5 +25,5 @@ export const Hint = ({words}: {words: string[]}) => {
     : show === 3 ? words.slice(0, 15).join(' ') + '...'
     : words.join(' ');
 
-  return (<span>{hint} <a href="#" onClick={(e) => showHint(e, 0)}>Hide</a></span>);
+  return (<span className="bg">{hint} <a href="#" onClick={(e) => showHint(e, 0)}>Hide</a></span>);
 }
