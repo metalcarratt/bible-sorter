@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './App.scss'
 import { Word } from './word';
 import { initWords } from './init-words';
@@ -7,6 +7,7 @@ import { getRandomVerse } from './get-random-verse';
 import { Hint } from './hint';
 import type { VerseDetail } from './flat-bible';
 import { getRandomBackground } from './backgrounds';
+import { useDrag } from './use-drag';
 
 function App() {
   const [words, setWords] = useState<string[]>([]);
@@ -17,6 +18,7 @@ function App() {
   const [verseRef, setVerseRef] = useState('');
   const [loading, setLoading] = useState(false);
   const [background, setBackground] = useState('');
+  const wordRefs = useRef<HTMLElement[]>([]);
  
   const getNewWord = async (randomVerse: VerseDetail) => {
     const verse = await getVerse(randomVerse);
@@ -47,9 +49,11 @@ function App() {
   }, []);
 
   const swapWords = (insertAt: number) => {
+    // console.log('init swap words', selectedWord);
     if (!selectedWord) {
       return;
     }
+    // console.log('swap words', selectedWord, insertAt);
     const _words = [...words];
     const word = _words[selectedWord];
     _words.splice(selectedWord, 1);
@@ -61,12 +65,14 @@ function App() {
     checkWords(_words);
   }
 
+  const drag = useDrag(selectedWord, setSelectedWord, swapWords, wordRefs);
+
   const checkWords = (words: string[]) => {
     console.log('originalWords on check', originalWords);
     const _errors: number[] = [];
     words.forEach((word, index) => {
       if (word !== originalWords[index]) {
-        console.log(`word ${word} does not match ${originalWords[index]} at index ${index}`);
+        // console.log(`word ${word} does not match ${originalWords[index]} at index ${index}`);
         _errors.push(index);
       }
     });
@@ -97,12 +103,14 @@ function App() {
             swapWords={swapWords} 
             selectedWord={selectedWord} 
             setSelectedWord={setSelectedWord}
+            drag={drag}
+            wordRefs={wordRefs}
           />
         )}
       </div>
       <div className="reference bg">{printVerseRef}</div>
       <Hint words={originalWords} />
-      {success && <button onClick={newWord}>New word</button>}
+      {success && <button className="bg" onClick={newWord}>New word</button>}
     </section> 
   )
 }

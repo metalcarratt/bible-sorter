@@ -6,28 +6,30 @@ export type Verse = {
 };
 
 export const getVerse = async (verseDetail: VerseDetail): Promise<Verse> => {
-  const url = `https://text.recoveryversion.bible/${verseDetail.bookNumber}_${verseDetail.book}_${verseDetail.chapter}.htm`;
-  // console.log('constructed url', url);
-  let resp;
-  try {
-    resp = await fetch(
-      `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-    );
-  } catch (e) {
-    resp = await fetch(
-      `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-    );
-  }
-  // const resp = await fetch(`http://localhost:4000/proxy?url=${url}`);
-  const text = await resp.text();
-  // console.log('html', text);
-  const verseWords = findVerseInHtml(text, verseDetail);
-  // console.log('verseWords', verseWords);
+  return j13_1;
 
-  return {
-    ref: `${verseDetail.book} ${verseDetail.chapter}:${verseDetail.verse}`,
-    words: verseWords ?? '',
-  };
+  // const url = `https://text.recoveryversion.bible/${verseDetail.bookNumber}_${verseDetail.book}_${verseDetail.chapter}.htm`;
+  // // console.log('constructed url', url);
+  // let resp;
+  // try {
+  //   resp = await fetch(
+  //     `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+  //   );
+  // } catch (e) {
+  //   resp = await fetch(
+  //     `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+  //   );
+  // }
+  // // const resp = await fetch(`http://localhost:4000/proxy?url=${url}`);
+  // const text = await resp.text();
+  // // console.log('html', text);
+  // const verseWords = findVerseInHtml(text, verseDetail);
+  // // console.log('verseWords', verseWords);
+
+  // return {
+  //   ref: `${verseDetail.book} ${verseDetail.chapter}:${verseDetail.verse}`,
+  //   words: verseWords ?? '',
+  // };
 
   // return j13_6;
 };
@@ -60,11 +62,11 @@ function nodeToHtml(node: ChildNode): string {
   return node.textContent ?? '';
 }
 
-// const j13_1 = {
-//   ref: 'John 13:1',
-//   words:
-//     'Now before the Feast of the Passover, Jesus knowing that His hour had come for Him to depart out of this world unto the Father, having loved His own who were in the world, He loved them to the uttermost.',
-// };
+const j13_1 = {
+  ref: 'John 13:1',
+  words:
+    'Now before the Feast of the Passover, Jesus knowing that His hour had come for Him to depart out of this world unto the Father, having loved His own who were in the world, He loved them to the uttermost.',
+};
 
 // const j13_6 = {
 //   ref: 'John 13:6',
