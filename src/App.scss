@@ -6,6 +6,7 @@
   place-items: center;
   flex-grow: 1;
   padding: 20px;
+  position: relative;
 }
 
 .background {
@@ -21,7 +22,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
-  gap: 8px;
+  // gap: 8px;
   // justify-content: center;
   align-items: center;
 
@@ -110,7 +111,7 @@ h4 {
   // color: green;
   font-weight: 400;
   font-size: 24px;
-  margin: 0;
+  // margin: 0;
   // padding: 8px 40px;
 }
 
@@ -121,4 +122,14 @@ h4 {
   background-position: center; /* centers the image */
   padding: 4px 40px;
   box-shadow: 2px 2px 8px #333;
+}
+
+select.chooseVersion {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 5px;
+  padding: 4px;
+  background-image: url('/bible-sorter/bgs/paper.png');
+  border: 1px solid #999;
 }

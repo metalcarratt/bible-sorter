@@ -17,9 +17,10 @@ function App() {
   const [verseRef, setVerseRef] = useState('');
   const [loading, setLoading] = useState(false);
   const [background, setBackground] = useState('');
+  const [version, setVersion] = useState<string>('RCV');
  
   const getNewWord = async (randomVerse: VerseDetail) => {
-    const verse = await getVerse(randomVerse);
+    const verse = await getVerse(randomVerse, version);
       const originalWords = verse.words.split(' ');
       setWords(initWords(verse.words));
       setOriginalWords(originalWords);
@@ -47,7 +48,7 @@ function App() {
   }, []);
 
   const swapWords = (insertAt: number) => {
-    if (!selectedWord) {
+    if (selectedWord === null) {
       return;
     }
     const _words = [...words];
@@ -62,11 +63,11 @@ function App() {
   }
 
   const checkWords = (words: string[]) => {
-    console.log('originalWords on check', originalWords);
+    // console.log('originalWords on check', originalWords);
     const _errors: number[] = [];
     words.forEach((word, index) => {
       if (word !== originalWords[index]) {
-        console.log(`word ${word} does not match ${originalWords[index]} at index ${index}`);
+        // console.log(`word ${word} does not match ${originalWords[index]} at index ${index}`);
         _errors.push(index);
       }
     });
@@ -102,7 +103,15 @@ function App() {
       </div>
       <div className="reference bg">{printVerseRef}</div>
       <Hint words={originalWords} />
-      {success && <button onClick={newWord}>New word</button>}
+      <button className="bg" onClick={newWord}>New word</button>
+      <select
+        className="chooseVersion"
+        value={version}
+        onChange={(e) => setVersion(e.target.value)}
+      >
+        <option value="RCV">RCV</option>
+        <option value="ASV">ASV</option>
+      </select>
     </section> 
   )
 }
