@@ -31,6 +31,7 @@ function App() {
   const getNewWord = async (randomVerse: VerseDetail) => {
     try {
     const verse = await getVerse(randomVerse, version, updateLog);
+    console.log('verse', verse);
     const originalWords = verse.words.split(' ');
     setWords(initWords(verse.words));
     setOriginalWords(originalWords);
@@ -42,7 +43,7 @@ function App() {
   }
 
   const newWord = () => {
-    const randomVerse = getRandomVerse();
+    const randomVerse = getRandomVerse(version);
     console.log('random verse', randomVerse);
     const verseRef = `${randomVerse.book} ${randomVerse.chapter}:${randomVerse.verse}`
     setVerseRef(verseRef);

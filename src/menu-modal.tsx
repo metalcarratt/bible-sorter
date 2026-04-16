@@ -21,6 +21,7 @@ export const MenuModal = ({version, setVersion, close, apiLog}: Props) => {
         >
           <option value="RCV">RCV</option>
           <option value="ASV">ASV</option>
+          <option value="Saved">Saved</option>
         </select>
 
         <ul className="apiLogs">

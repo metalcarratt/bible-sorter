@@ -71,6 +71,25 @@ const findVerseInHtml = (htmlString: string, verseDetail: VerseDetail) => {
   return resultHtml;
 };
 
+export const extractAllVerses = (htmlString: string) => {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(htmlString, 'text/html');
+
+  const versesSection = doc.querySelector('section#verses');
+  if (!versesSection) return [];
+
+  const results: string[] = [];
+
+  for (const p of Array.from(versesSection.children)) {
+    const children = Array.from(p.childNodes);
+    const [, ...rest] = children; // remove the first <b> tag
+    const html = rest.map(nodeToHtml).join('');
+    results.push(html);
+  }
+
+  return results;
+};
+
 function nodeToHtml(node: ChildNode): string {
   return node.textContent ?? '';
 }

@@ -1,6 +1,7 @@
 import type { VerseDetail } from './flat-bible';
 import { getAsvVerse } from './verse-sources/asv';
 import { getRvcVerse } from './verse-sources/rcv';
+import { getSavedVerse } from './verse-sources/saved';
 
 export type Verse = {
   ref: string;
@@ -16,6 +17,8 @@ export const getVerse = async (
     return await getRvcVerse(verseDetail, updateLog);
   } else if (version === 'ASV') {
     return await getAsvVerse(verseDetail, updateLog);
+  } else if (version === 'Saved') {
+    return await getSavedVerse(verseDetail);
   } else {
     return j13_1;
   }
