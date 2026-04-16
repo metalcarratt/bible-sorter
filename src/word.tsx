@@ -22,24 +22,24 @@ export const Word = ({word, index, error, swapWords, selectedWord, setSelectedWo
     );
   }
   
-  const clickLeft = () => {
-    const insertAt = index < selectedWord ? index : index - 1;
-    console.log('click left, position', insertAt);
-    swapWords(insertAt);
-  }
-  const clickRight = () => {
-    const insertAt = index < selectedWord ? index + 1 : index;
-    console.log('click right, position', insertAt);
-    swapWords(insertAt);
-  }
+  // const clickLeft = () => {
+  //   const insertAt = index < selectedWord ? index : index - 1;
+  //   console.log('click left, position', insertAt);
+  //   swapWords(insertAt);
+  // }
+  // const clickRight = () => {
+  //   const insertAt = index < selectedWord ? index + 1 : index;
+  //   console.log('click right, position', insertAt);
+  //   swapWords(insertAt);
+  // }
 
   return (
     <span className="wdz">
-      {index !== selectedWord + 1 && <span className="hit left" onClick={clickLeft}/>}
-      {index !== selectedWord - 1 && <span className="hit right" onClick={clickRight}/>}
-      <span className="dropZone left" />
-      <span className={`word ${error ? 'error' : ''}`}>{word}</span>
-      <span className="dropZone right"  />
+      {/* {index !== selectedWord + 1 && <span className="hit left" onClick={clickLeft}/>}
+      {index !== selectedWord - 1 && <span className="hit right" onClick={clickRight}/>} */}
+      {/* <span className="dropZone left" /> */}
+      <span className={`word ${error ? 'error' : ''}`} onClick={() => swapWords(index)}>{word}</span>
+      {/* <span className="dropZone right"  /> */}
     </span>
   );
 }

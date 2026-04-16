@@ -10,11 +10,12 @@ export type Verse = {
 export const getVerse = async (
   verseDetail: VerseDetail,
   version: string,
+  updateLog: (log: string) => void,
 ): Promise<Verse> => {
   if (version === 'RCV') {
-    return await getRvcVerse(verseDetail);
+    return await getRvcVerse(verseDetail, updateLog);
   } else if (version === 'ASV') {
-    return await getAsvVerse(verseDetail);
+    return await getAsvVerse(verseDetail, updateLog);
   } else {
     return j13_1;
   }

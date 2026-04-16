@@ -7,6 +7,8 @@ import { getRandomVerse } from './get-random-verse';
 import { Hint } from './hint';
 import type { VerseDetail } from './flat-bible';
 import { getRandomBackground } from './backgrounds';
+import { MenuModal } from './menu-modal';
+import { ApiLogModal } from './api-log-modal';
 
 function App() {
   const [words, setWords] = useState<string[]>([]);
@@ -18,20 +20,32 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [background, setBackground] = useState('');
   const [version, setVersion] = useState<string>('RCV');
+  const [showMenu, setShowMenu] = useState(false);
+  const [apiLog, setApiLog] = useState<string[]>([]);
+  const [controlMode, setControlMode] = useState<string>('left');
  
+  const updateLog = (log: string) => {
+    setApiLog([...apiLog, log]);
+  }
+
   const getNewWord = async (randomVerse: VerseDetail) => {
-    const verse = await getVerse(randomVerse, version);
-      const originalWords = verse.words.split(' ');
-      setWords(initWords(verse.words));
-      setOriginalWords(originalWords);
-      setVerseRef(verse.ref);
+    try {
+    const verse = await getVerse(randomVerse, version, updateLog);
+    const originalWords = verse.words.split(' ');
+    setWords(initWords(verse.words));
+    setOriginalWords(originalWords);
+    setVerseRef(verse.ref);
+    setLoading(false);
+    } catch (error) {
       setLoading(false);
+    }
   }
 
   const newWord = () => {
     const randomVerse = getRandomVerse();
     console.log('random verse', randomVerse);
-    setVerseRef(`${randomVerse.book} ${randomVerse.chapter}:${randomVerse.verse}`);
+    const verseRef = `${randomVerse.book} ${randomVerse.chapter}:${randomVerse.verse}`
+    setVerseRef(verseRef);
     setLoading(true);
     setSuccess(false);
     setErrors([]);
@@ -39,22 +53,42 @@ function App() {
     setSelectedWord(null);
     setOriginalWords([]);
     setBackground(getRandomBackground());
+    setApiLog(['Fetching verse '+ verseRef + ' from ' + version]);
     
     getNewWord(randomVerse);
   }
 
   useEffect(() => {
-    newWord();
+    // newWord();
   }, []);
 
-  const swapWords = (insertAt: number) => {
+  const swapWords = (index: number) => {
     if (selectedWord === null) {
       return;
     }
+    let insertAt;
+    if (controlMode === 'left') {
+      insertAt = index < selectedWord ? index : index - 1;
+    } else if (controlMode === 'right') {
+      insertAt = index < selectedWord ? index + 1 : index;
+    } else {
+      return actualSwap(index, selectedWord);
+    }
+
     const _words = [...words];
     const word = _words[selectedWord];
     _words.splice(selectedWord, 1);
     _words.splice(insertAt, 0, word);
+    setWords(_words);
+    setSelectedWord(null);
+    setErrors([]);
+
+    checkWords(_words);
+  }
+
+  const actualSwap = (index1: number, index2: number) => {
+    const _words = [...words];
+    [_words[index1], _words[index2]] = [_words[index2], _words[index1]];
     setWords(_words);
     setSelectedWord(null);
     setErrors([]);
@@ -101,17 +135,33 @@ function App() {
           />
         )}
       </div>
-      <div className="reference bg">{printVerseRef}</div>
+      <div className="reference bg">
+        {printVerseRef}
+        <span
+          className={`control-icon start ${controlMode === 'right' ? 'selected' : ''}`}
+          onClick={() => setControlMode('left')}
+        >
+          ▷
+        </span>
+        <span
+          className={`control-icon ${controlMode === 'left' ? 'selected' : ''}`}
+          onClick={() => setControlMode('right')}
+        >
+          ◁
+        </span>
+        <span
+          className={`control-icon end ${controlMode === 'swap' ? 'selected' : ''}`}
+          onClick={() => setControlMode('swap')}
+        >
+          ⇄
+        </span>
+      </div>
       <Hint words={originalWords} />
       <button className="bg" onClick={newWord}>New word</button>
-      <select
-        className="chooseVersion"
-        value={version}
-        onChange={(e) => setVersion(e.target.value)}
-      >
-        <option value="RCV">RCV</option>
-        <option value="ASV">ASV</option>
-      </select>
+      <button className="menu" onClick={() => setShowMenu(true)}>☰</button>
+      
+      {showMenu && <MenuModal version={version} setVersion={setVersion} close={() => setShowMenu(false)} apiLog={apiLog} />}
+      {loading && <ApiLogModal apiLog={apiLog} />}
     </section> 
   )
 }

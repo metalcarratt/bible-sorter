@@ -1,24 +1,43 @@
 import type { VerseDetail } from '../flat-bible';
 import type { Verse } from '../get-verse';
 
-export const getRvcVerse = async (verseDetail: VerseDetail): Promise<Verse> => {
+export const getRvcVerse = async (
+  verseDetail: VerseDetail,
+  updateLog: (log: string) => void,
+): Promise<Verse> => {
+  const cacheKey = 'cache::' + verseDetail.book + verseDetail.chapter;
+  const cachedWords = localStorage.getItem(cacheKey);
+  if (cachedWords !== null) {
+    return {
+      ref: `${verseDetail.book} ${verseDetail.chapter}:${verseDetail.verse}`,
+      words: cachedWords,
+    };
+  }
+
   const url = `https://text.recoveryversion.bible/${verseDetail.bookNumber}_${verseDetail.book}_${verseDetail.chapter}.htm`;
   // console.log('constructed url', url);
   let resp;
+  const fetchUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+  // const fetchUrl = `https://corsproxy.io?${encodeURIComponent(url)}`;
   try {
-    resp = await fetch(
-      `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-    );
+    updateLog('fetching from ' + fetchUrl);
+    resp = await fetch(fetchUrl);
   } catch (e) {
-    resp = await fetch(
-      `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-    );
+    try {
+      updateLog('failed with error ' + e + ', fetch again...');
+      resp = await fetch(fetchUrl);
+    } catch (e) {
+      updateLog('failed again');
+      throw e;
+    }
   }
   // const resp = await fetch(`http://localhost:4000/proxy?url=${url}`);
   const text = await resp.text();
   // console.log('html', text);
   const verseWords = findVerseInHtml(text, verseDetail);
   // console.log('verseWords', verseWords);
+
+  if (verseWords) localStorage.setItem(cacheKey, verseWords);
 
   return {
     ref: `${verseDetail.book} ${verseDetail.chapter}:${verseDetail.verse}`,
