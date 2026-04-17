@@ -18,7 +18,7 @@ export const getVerse = async (
   } else if (version === 'ASV') {
     return await getAsvVerse(verseDetail, updateLog);
   } else if (version === 'Saved') {
-    return await getSavedVerse(verseDetail);
+    return (await getSavedVerse(verseDetail)) as Verse;
   } else {
     return j13_1;
   }

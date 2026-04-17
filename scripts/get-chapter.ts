@@ -22,18 +22,26 @@ const fetchChapter = async () => {
   const verseDetail = {
     book: 'Genesis',
     bookNumber: '01',
-    chapter: 10,
-    verse: 1,
+    chapter: 20,
+    // verse: 1,
   };
 
-  const url = `https://text.recoveryversion.bible/${verseDetail.bookNumber}_${verseDetail.book}_${verseDetail.chapter}.htm`;
-  const resp = await fetch(url);
-  const text = await resp.text();
-  const verses = extractAllVerses(text);
-  writeFileSync(
-    `${verseDetail.bookNumber}_${verseDetail.book}_${verseDetail.chapter}.ts`,
-    `export const verses = ${JSON.stringify(verses)}`,
-    'utf8',
-  );
+  const chs = [33, 34, 35, 36, 37, 38, 40, 41, 42, 43, 44, 45, 46, 48];
+
+  for (const ch of chs) {
+    verseDetail.chapter = ch;
+
+    const url = `https://text.recoveryversion.bible/${verseDetail.bookNumber}_${verseDetail.book}_${verseDetail.chapter}.htm`;
+    console.log('calling url', url);
+    const resp = await fetch(url);
+    const text = await resp.text();
+    const verses = extractAllVerses(text);
+    console.log('writing file');
+    writeFileSync(
+      `${verseDetail.bookNumber}_${verseDetail.book}_${verseDetail.chapter}.json`,
+      `${JSON.stringify(verses)}`,
+      'utf8',
+    );
+  }
 };
 fetchChapter();

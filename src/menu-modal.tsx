@@ -1,3 +1,5 @@
+import { downloadRcv } from "./verse-sources/download-rcv";
+
 type Props = {
   version: string;
   setVersion: (v: string) => void;
@@ -6,6 +8,11 @@ type Props = {
 }
 
 export const MenuModal = ({version, setVersion, close, apiLog}: Props) => {
+  const onClickDownload = () => {
+    console.log('click download');
+    downloadRcv();
+  }
+
   return (
     <div className="modalBg">
       <div className="modal">
@@ -23,6 +30,8 @@ export const MenuModal = ({version, setVersion, close, apiLog}: Props) => {
           <option value="ASV">ASV</option>
           <option value="Saved">Saved</option>
         </select>
+
+        <button onClick={onClickDownload}>Download RCV</button>
 
         <ul className="apiLogs">
           {apiLog.map(log => <li>{log}</li>)}

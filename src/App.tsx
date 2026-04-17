@@ -18,12 +18,17 @@ function App() {
   const [originalWords, setOriginalWords] = useState<string[]>([]);
   const [verseRef, setVerseRef] = useState('');
   const [loading, setLoading] = useState(false);
-  const [background, setBackground] = useState('');
-  const [version, setVersion] = useState<string>('RCV');
+  const [background, setBackground] = useState(getRandomBackground());
+  const v = localStorage.getItem('version');
+  const [version, setVersion] = useState<string>(v ?? 'RCV');
   const [showMenu, setShowMenu] = useState(false);
   const [apiLog, setApiLog] = useState<string[]>([]);
   const [controlMode, setControlMode] = useState<string>('left');
  
+  useEffect(() => {
+    localStorage.setItem('version', version);
+  }, [version]);
+
   const updateLog = (log: string) => {
     setApiLog([...apiLog, log]);
   }
@@ -140,13 +145,13 @@ function App() {
         {printVerseRef}
         <span
           className={`control-icon start ${controlMode === 'right' ? 'selected' : ''}`}
-          onClick={() => setControlMode('left')}
+          onClick={() => setControlMode('right')}
         >
           ▷
         </span>
         <span
           className={`control-icon ${controlMode === 'left' ? 'selected' : ''}`}
-          onClick={() => setControlMode('right')}
+          onClick={() => setControlMode('left')}
         >
           ◁
         </span>
