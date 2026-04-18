@@ -4,13 +4,14 @@ type Props = {
   version: string;
   setVersion: (v: string) => void;
   close: () => void
-  apiLog: string[]
+  apiLog: string[],
+  updateLog: (log: string) => void
 }
 
-export const MenuModal = ({version, setVersion, close, apiLog}: Props) => {
+export const MenuModal = ({version, setVersion, close, apiLog, updateLog}: Props) => {
   const onClickDownload = () => {
     console.log('click download');
-    downloadRcv();
+    downloadRcv(updateLog);
   }
 
   return (

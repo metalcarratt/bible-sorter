@@ -30,7 +30,7 @@ function App() {
   }, [version]);
 
   const updateLog = (log: string) => {
-    setApiLog([...apiLog, log]);
+    setApiLog((prev) => [...prev, log]);
   }
 
   const getNewWord = async (randomVerse: VerseDetail) => {
@@ -163,10 +163,10 @@ function App() {
         </span>
       </div>
       <Hint words={originalWords} />
-      <button className="bg" onClick={newWord}>New word</button>
+      <button className="bg" onClick={newWord}>New verse</button>
       <button className="menu" onClick={() => setShowMenu(true)}>☰</button>
       
-      {showMenu && <MenuModal version={version} setVersion={setVersion} close={() => setShowMenu(false)} apiLog={apiLog} />}
+      {showMenu && <MenuModal version={version} setVersion={setVersion} close={() => setShowMenu(false)} apiLog={apiLog} updateLog={updateLog} />}
       {loading && <ApiLogModal apiLog={apiLog} />}
     </section> 
   )

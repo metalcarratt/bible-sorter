@@ -2,16 +2,24 @@ import JSZip from 'jszip';
 
 const ZIP_LOCATION = 'http://LAPTOP-7L9KQ37O.local:3005/bible/rcv.zip';
 
-export const downloadRcv = async () => {
-  const blob = await tryDownloadBible();
-  console.log('downloaded');
+export const downloadRcv = async (updateLog: (log: string) => void) => {
+  let blob;
+  try {
+    blob = await tryDownloadBible();
+  } catch (e) {
+    updateLog(`error: ${e}`);
+    return;
+  }
   if (!blob) return;
+  console.log('downloaded');
+  updateLog('downloaded');
   const files = await unzipBible(blob);
   // console.log('files', files);
 
   for (const filename of Object.keys(files)) {
     localStorage.setItem(filename.replace('.json', ''), files[filename]);
   }
+  updateLog('saved');
 };
 
 async function tryDownloadBible() {
