@@ -4,12 +4,7 @@ const ZIP_LOCATION = 'http://LAPTOP-7L9KQ37O.local:3005/bible/rcv.zip';
 
 export const downloadRcv = async (updateLog: (log: string) => void) => {
   let blob;
-  try {
-    blob = await tryDownloadBible();
-  } catch (e) {
-    updateLog(`error: ${e}`);
-    return;
-  }
+  blob = await tryDownloadBible(updateLog);
   if (!blob) return;
   console.log('downloaded');
   updateLog('downloaded');
@@ -22,7 +17,8 @@ export const downloadRcv = async (updateLog: (log: string) => void) => {
   updateLog('saved');
 };
 
-async function tryDownloadBible() {
+async function tryDownloadBible(updateLog: (log: string) => void) {
+  updateLog('About to download from ' + ZIP_LOCATION);
   try {
     const resp = await fetch(ZIP_LOCATION, {
       mode: 'cors',
@@ -32,7 +28,8 @@ async function tryDownloadBible() {
 
     const blob = await resp.blob();
     return blob;
-  } catch {
+  } catch (e) {
+    updateLog(`Caught error: ${e}`);
     return null; // not on home network
   }
 }
